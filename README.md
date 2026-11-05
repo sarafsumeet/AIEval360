@@ -37,7 +37,7 @@ aieval360/
 │   ├── agents/                 # Agent evaluator (goal completion, loop detection)
 │   ├── safety/                 # SafetyProbeLibrary, pattern-based detectors
 │   └── providers/              # BaseProviderAdapter → mock / openai / ollama
-├── tests/                      # 490+ tests across 4 stages
+├── tests/                      # 580 tests across 8 test modules
 │   ├── unit/                   # Unit tests per module
 │   ├── evidence/               # Test fixtures (golden outputs)
 │   ├── integration/            # Cross-stage integration tests
@@ -95,7 +95,7 @@ pip install -e ".[dev]"
 
 ```bash
 pytest tests/ -v
-# Expected: 490+ tests passing
+# Expected: 580 tests passing
 ```
 
 ### Run Metric Evaluation (Mock)
@@ -203,7 +203,7 @@ The safety probe runner is designed for CI/CD integration:
 | Stage 2 — Metrics | 142 | All MetricCalculator implementations, registry |
 | Stage 3 — RAG | 128 | RAG pipeline, retrieval and generation metrics |
 | Stage 4 — Safety | 125 | All probe categories, mandatory gate logic |
-| **Total** | **490** | **Core evaluation engine** |
+| **Total** | **580** | **Full platform — unit, contract, integration, evidence, security, performance, e2e** |
 
 > Tests verify that evaluation **logic runs correctly**. They do not validate the AI model being evaluated.
 
