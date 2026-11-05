@@ -37,7 +37,7 @@ aieval360/
 │   ├── agents/                 # Agent evaluator (goal completion, loop detection)
 │   ├── safety/                 # SafetyProbeLibrary, pattern-based detectors
 │   └── providers/              # BaseProviderAdapter → mock / openai / ollama
-├── tests/                      # 626+ tests across 4 stages
+├── tests/                      # 632 tests across 7 suites
 │   ├── unit/                   # Unit tests per module
 │   ├── evidence/               # Test fixtures (golden outputs)
 │   ├── integration/            # Cross-stage integration tests
@@ -95,7 +95,7 @@ pip install -e ".[dev]"
 
 ```bash
 pytest tests/ -v
-# Expected: 626+ tests passing
+# Expected: 632+ tests passing
 ```
 
 ### Run Metric Evaluation (Mock)
@@ -153,14 +153,14 @@ AIEval360's governance model is designed with Australian regulated-industry obli
 
 | Regulation | Relevance |
 |-----------|-----------|
-| APRA CPS 234 | Information security for APRA-regulated entities; 7-year audit trail (`retention_days: 2555`) |
+| APRA CPS 234 | Information security for APRA-regulated entities. The platform provides a configurable evidence-retention period (`retention_days` in `config/settings.yaml`, default 2555 days / ~7 years). Whether this configuration satisfies an entity's actual CPS 234 obligations depends on the entity's specific circumstances and requires legal review. |
 | Privacy Act 1988 (APPs) | PII leakage probes test APP 11 compliance |
 | AML/CTF Act 2006 | Banking dataset includes AML identification scenarios |
 | Insurance Contracts Act 1984 | Insurance dataset tests statutory definitions (flood/storm, duty of disclosure) |
 | ASIC RG 271 (IDR) | Insurance dataset tests dispute resolution accuracy |
 | NCCP Act 2009 | Banking dataset tests responsible lending narratives |
 
-> This alignment is for **evaluation design purposes only** and does not constitute legal advice.
+> **Disclaimer:** Regulatory alignment is for **evaluation design purposes only** and does not constitute legal advice. The platform's configurable retention settings are a governance tool, not a determination that any specific retention period satisfies a legal requirement. Entities operating under Australian financial-services regulation should obtain independent legal advice on their applicable obligations.
 
 ---
 
@@ -169,9 +169,10 @@ AIEval360's governance model is designed with Australian regulated-industry obli
 Every evaluation run produces a 4-layer audit trail:
 
 ```
-Layer 1: Dataset Checksum    sha256:<hash of CSV>
+Layer 1: Dataset Checksum    sha256:<hex digest of CSV at evaluation time>
     ↓
-Layer 2: Run Provenance      run_id, timestamp, config reference
+Layer 2: Run Provenance      run_id, UTC timestamp, git HEAD SHA (or "git-unavailable"),
+                             provider, model, evaluator version
     ↓
 Layer 3: Result Traceability per-record scores, flags, governance status
     ↓
@@ -179,6 +180,16 @@ Layer 4: Governance Record   mandatory actions, regulatory alignment, retention 
 ```
 
 Evidence JSON files are stored in `evidence/` and conform to `data/schemas/evidence_run_schema.json`.
+
+**Actual integrity guarantees:**
+- Dataset checksums (SHA-256) detect accidental modification of input data between runs.
+- Git provenance records the commit SHA of the codebase that produced the results, enabling code-level auditability when the repository is accessible.
+- Each evidence record is a standalone JSON file; schema conformance is validated by the contract test suite.
+
+**Limitations:**
+- Evidence files are stored on the local filesystem. They are **not** stored in an append-only or immutable log, cryptographically signed, or written to a tamper-evident store. Files can be modified or deleted by anyone with filesystem access.
+- If `git` is unavailable at runtime, the commit SHA is recorded as `"git-unavailable"` rather than failing the run.
+- Retention enforcement (archival, deletion after `retention_days`) is not automatically applied by the platform; it requires an external process or operational procedure.
 
 ---
 
@@ -197,14 +208,19 @@ The safety probe runner is designed for CI/CD integration:
 
 ## Test Coverage
 
-| Stage | Tests | Coverage |
-|-------|-------|----------|
-| Stage 1 — Foundation | 95 | Provider adapters, base models, config |
-| Stage 2 — Metrics | 142 | All MetricCalculator implementations, registry |
-| Stage 3 — RAG | 128 | RAG pipeline, retrieval and generation metrics |
-| Stage 4 — Safety | 125 | All probe categories, mandatory gate logic |
-| **Total** | **626** | **Core evaluation engine** |
+| Suite | Tests (collected) | Scope |
+|-------|-------------------|-------|
+| `tests/unit/` | 535 | Unit tests across all stages and scripts |
+| `tests/contract/` | 38 | Schema and evidence provenance contracts |
+| `tests/security/` | 21 | Adversarial probe execution |
+| `tests/evidence/` | 12 | Evidence fixture validation |
+| `tests/integration/` | 15 | Pipeline integration tests |
+| `tests/e2e/` | 7 | End-to-end subprocess invocation |
+| `tests/performance/` | 4 | Throughput benchmarks |
+| **Total** | **632** | **Core evaluation engine** |
 
+> **Note on test counts:** The total of 632 is the number of tests *collected and run* by pytest, which includes parametrised test variants. The underlying test functions number approximately 490; the remaining tests are generated at runtime through `@pytest.mark.parametrize`. Both figures are correct — 632 is what `pytest -q` reports and what CI runs.
+>
 > Tests verify that evaluation **logic runs correctly**. They do not validate the AI model being evaluated.
 
 ---
