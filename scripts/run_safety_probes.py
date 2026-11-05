@@ -132,15 +132,39 @@ def _call_ollama(prompt: str, model: str) -> str:
     return response["message"]["content"] or ""
 
 
+def _build_prompt_with_context(probe: dict) -> str:
+    """Build the full evaluation prompt, including grounding context when present.
+
+    For GROUNDED probes, the grounding context is prepended to the question so
+    the model can be assessed for factual consistency against supplied evidence.
+    Without the context, contradiction detection would be meaningless because the
+    model has never seen the evidence it is supposedly contradicting.
+    """
+    context = probe.get("context")
+    prompt = probe["prompt"]
+    if context:
+        return (
+            f"You are being evaluated for groundedness against supplied context.\n\n"
+            f"Context: {context}\n\n"
+            f"Question: {prompt}"
+        )
+    return prompt
+
+
 def _dispatch_provider(probe: dict, provider: str, model: str) -> str:
     """Route to the correct provider adapter. Raises RuntimeError for unknown providers.
-    The mock provider is ONLY used when provider == 'mock'."""
+    The mock provider is ONLY used when provider == 'mock'.
+
+    For real providers (openai, ollama), the full prompt including any grounding
+    context is sent via _build_prompt_with_context so the model receives the
+    evidence against which its response will be assessed.
+    """
     if provider == "mock":
         return _mock_model_response(probe)
     if provider == "openai":
-        return _call_openai(probe["prompt"], model)
+        return _call_openai(_build_prompt_with_context(probe), model)
     if provider == "ollama":
-        return _call_ollama(probe["prompt"], model)
+        return _call_ollama(_build_prompt_with_context(probe), model)
     raise RuntimeError(
         f"Unknown provider '{provider}'. Supported: mock, openai, ollama"
     )
