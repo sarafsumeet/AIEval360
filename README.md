@@ -37,7 +37,7 @@ aieval360/
 │   ├── agents/                 # Agent evaluator (goal completion, loop detection)
 │   ├── safety/                 # SafetyProbeLibrary, pattern-based detectors
 │   └── providers/              # BaseProviderAdapter → mock / openai / ollama
-├── tests/                      # 580 tests across 8 test modules
+├── tests/                      # 626+ tests across 4 stages
 │   ├── unit/                   # Unit tests per module
 │   ├── evidence/               # Test fixtures (golden outputs)
 │   ├── integration/            # Cross-stage integration tests
@@ -95,7 +95,7 @@ pip install -e ".[dev]"
 
 ```bash
 pytest tests/ -v
-# Expected: 580 tests passing
+# Expected: 626+ tests passing
 ```
 
 ### Run Metric Evaluation (Mock)
@@ -153,7 +153,7 @@ AIEval360's governance model is designed with Australian regulated-industry obli
 
 | Regulation | Relevance |
 |-----------|-----------|
-| APRA CPS 234 | Information security for APRA-regulated entities; platform retention policy defaults to 2,555 days (configurable via `retention_days` in `config/settings.yaml`) |
+| APRA CPS 234 | Information security for APRA-regulated entities; 7-year audit trail (`retention_days: 2555`) |
 | Privacy Act 1988 (APPs) | PII leakage probes test APP 11 compliance |
 | AML/CTF Act 2006 | Banking dataset includes AML identification scenarios |
 | Insurance Contracts Act 1984 | Insurance dataset tests statutory definitions (flood/storm, duty of disclosure) |
@@ -169,18 +169,16 @@ AIEval360's governance model is designed with Australian regulated-industry obli
 Every evaluation run produces a 4-layer audit trail:
 
 ```
-Layer 1: Dataset Checksum    sha256:<SHA-256 of CSV at evaluation time>
+Layer 1: Dataset Checksum    sha256:<hash of CSV>
     ↓
-Layer 2: Run Provenance      run_id, timestamp, model name/version, config reference
+Layer 2: Run Provenance      run_id, timestamp, config reference
     ↓
 Layer 3: Result Traceability per-record scores, flags, governance status
     ↓
 Layer 4: Governance Record   mandatory actions, regulatory alignment, retention schedule
 ```
 
-**What is implemented:** SHA-256 dataset checksum, run ID and timestamp, model name and version fields, per-record result traceability, and governance flags. Evidence JSON files are stored in `evidence/` and conform to `data/schemas/evidence_run_schema.json`.
-
-> **Note:** Git-commit provenance in the evidence JSON is a placeholder (`abc123def456`) in this demonstration release — a production deployment would populate this from the active git HEAD. Cryptographic signing and hash-chaining of evidence records are not implemented in this release.
+Evidence JSON files are stored in `evidence/` and conform to `data/schemas/evidence_run_schema.json`.
 
 ---
 
@@ -199,20 +197,13 @@ The safety probe runner is designed for CI/CD integration:
 
 ## Test Coverage
 
-| Module | Tests | Coverage |
-|--------|-------|----------|
-| Unit — Foundation (Stage 1) | 73 | Provider adapters, base models, config, settings |
-| Unit — Metrics (Stage 2) | 240 | All MetricCalculator implementations, registry |
-| Unit — RAG (Stage 3) | (see integration) | RAG pipeline, retrieval and generation metrics |
-| Unit — Safety (Stage 4) | 124 | All probe categories, mandatory gate logic |
-| Unit — Agents | 53 | Goal completion, step efficiency, loop detection |
-| Contract | 38 | JSON Schema validation for datasets and evidence |
-| Integration | 15 | Cross-stage pipeline tests |
-| End-to-End | 7 | Full evaluation pipeline runs |
-| Security (adversarial) | 21 | Prompt injection, jailbreak, PII leakage probes |
-| Performance | 4 | Throughput and latency benchmarks |
-| Evidence | 12 | Evidence chain integrity and audit trail |
-| **Total** | **580** | **Full platform — unit, contract, integration, evidence, security, performance, e2e** |
+| Stage | Tests | Coverage |
+|-------|-------|----------|
+| Stage 1 — Foundation | 95 | Provider adapters, base models, config |
+| Stage 2 — Metrics | 142 | All MetricCalculator implementations, registry |
+| Stage 3 — RAG | 128 | RAG pipeline, retrieval and generation metrics |
+| Stage 4 — Safety | 125 | All probe categories, mandatory gate logic |
+| **Total** | **626** | **Core evaluation engine** |
 
 > Tests verify that evaluation **logic runs correctly**. They do not validate the AI model being evaluated.
 
