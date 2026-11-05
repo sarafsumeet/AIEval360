@@ -1,0 +1,94 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+htmlcov/
+.pytest_cache/
+pytestdebug.log
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Secrets — never commit these
+.env.local
+.env.production
+secrets.yaml
+*.pem
+*.key
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Local evidence runs (generated at runtime — not committed)
+evidence/evaluation_runs/*.json
+evidence/safety_reports/*.json
+evidence/governance_records/*.json
+
+# Keep example/fixture evidence files
+!evidence/evaluation_runs/run_banking_20261101.json
+!evidence/evaluation_runs/run_university_20261101.json
+!evidence/safety_reports/safety_eval_banking_20261101.json
+!evidence/safety_reports/safety_eval_insurance_20261101.json
+!evidence/governance_records/governance_record_20261101.json

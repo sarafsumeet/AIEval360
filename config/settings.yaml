@@ -1,0 +1,58 @@
+# AIEval360 — Application Settings
+# This file sets defaults. Environment variables override all values.
+# Never commit secrets to this file — use .env or secret manager.
+
+app:
+  name: "AIEval360"
+  version: "0.4.0"
+  environment: "development"       # development | staging | production
+  log_level: "INFO"                # DEBUG | INFO | WARNING | ERROR
+
+database:
+  url: "sqlite+aiosqlite:///./aieval360.db"
+  # Production: "postgresql+asyncpg://user:pass@host:5432/aieval360"
+  pool_size: 5
+  max_overflow: 10
+  echo_sql: false
+
+providers:
+  openai:
+    base_url: "https://api.openai.com/v1"
+    default_model: "gpt-4o"
+    timeout_seconds: 30
+    max_retries: 3
+  ollama:
+    base_url: "http://localhost:11434"
+    default_model: "llama3.2"
+    timeout_seconds: 60
+
+evaluation:
+  max_concurrent_evaluations: 10
+  default_batch_size: 50
+  metric_timeout_seconds: 30
+  enable_llm_judged_metrics: false   # Requires API key; set true in production
+  judge_model: "gpt-4o-mini"
+
+safety:
+  run_all_probes_by_default: true
+  critical_severity_blocks_gate: true
+  probe_timeout_seconds: 15
+  max_concurrent_probes: 5
+
+rag:
+  default_retrieval_k: 5
+  enable_llm_judge: false          # Set true with valid API key
+  pipeline_concurrency: 10
+
+agents:
+  goal_completion_threshold_achieved: 0.70
+  goal_completion_threshold_partial: 0.30
+  loop_detection_enabled: true
+  max_trace_steps: 500
+
+governance:
+  require_executed_by: true        # Reject runs without identity
+  require_run_label: true
+  audit_trail_retention_days: 2555  # 7 years (APRA / AML requirements)
+  evidence_output_dir: "./evidence"
+  reports_output_dir: "./reports"

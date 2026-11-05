@@ -1,0 +1,14 @@
+{
+  "_fixture_description": "Golden output for banking evaluation run. Used by contract and integration tests to assert pipeline output shape and known metric values.",
+  "run_id": "eval-run-bnk-fixture-001",
+  "sector": "banking",
+  "records_evaluated": 15,
+  "run_status": "COMPLETED",
+  "aggregate_metrics": {
+    "accuracy": {"value": 0.800, "status": "FAIL", "threshold": 0.92},
+    "f1": {"value": 0.740, "status": "WARN", "threshold": 0.88},
+    "rouge_l": {"value": 0.710, "status": "PASS", "threshold": 0.65}
+  },
+  "intentional_errors": ["BNK_002", "BNK_004", "BNK_007"],
+  "governance_flags": ["BELOW_SECTOR_THRESHOLD"]
+}

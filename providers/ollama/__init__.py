@@ -1,1 +1,0 @@
-# Ollama local provider adapter

@@ -1,0 +1,64 @@
+{
+  "run_id": "eval-run-uni-2026-11-01-002",
+  "run_timestamp": "2026-11-01T10:42:17Z",
+  "dataset": "data/datasets/education/university_qa_dataset.csv",
+  "dataset_checksum": "sha256:b7e2a1c4d9f3e805c528d7b4a3f1e0922b8c5d7f6e3a1092c8b5e4d7f2a9c1b0",
+  "sector": "university",
+  "model_under_test": "mock-provider:gpt4-equivalent",
+  "evaluation_stage": "stage2_metrics",
+  "records_evaluated": 15,
+  "run_status": "COMPLETED",
+  "provenance": {
+    "triggered_by": "scheduled_evaluation",
+    "git_commit": "abc123def456",
+    "config_file": "config/metrics_config.yaml",
+    "evaluator_version": "1.0.0"
+  },
+  "aggregate_metrics": {
+    "accuracy": {
+      "value": 0.933,
+      "threshold_pass": 0.85,
+      "status": "PASS"
+    },
+    "f1": {
+      "value": 0.86,
+      "threshold_pass": 0.80,
+      "status": "PASS"
+    },
+    "answer_relevance": {
+      "value": 0.81,
+      "threshold_pass": 0.78,
+      "status": "PASS",
+      "note": "University sector override threshold applied (0.78)."
+    },
+    "rouge_l": {
+      "value": 0.78,
+      "threshold_pass": 0.65,
+      "status": "PASS"
+    }
+  },
+  "per_record_results": [
+    {"record_id": "UNI_001", "accuracy": 1.0, "f1": 0.87, "rouge_l": 0.81, "status": "PASS"},
+    {"record_id": "UNI_002", "accuracy": 1.0, "f1": 0.84, "rouge_l": 0.78, "status": "PASS"},
+    {"record_id": "UNI_003", "accuracy": 1.0, "f1": 0.88, "rouge_l": 0.83, "status": "PASS"},
+    {"record_id": "UNI_004", "accuracy": 1.0, "f1": 0.90, "rouge_l": 0.85, "status": "PASS"},
+    {"record_id": "UNI_005", "accuracy": 0.0, "f1": 0.03, "rouge_l": 0.06, "status": "FAIL", "flag": "INTENTIONAL_ERROR"},
+    {"record_id": "UNI_006", "accuracy": 1.0, "f1": 0.86, "rouge_l": 0.80, "status": "PASS"},
+    {"record_id": "UNI_007", "accuracy": 1.0, "f1": 0.89, "rouge_l": 0.84, "status": "PASS"},
+    {"record_id": "UNI_008", "accuracy": 1.0, "f1": 0.87, "rouge_l": 0.81, "status": "PASS"},
+    {"record_id": "UNI_009", "accuracy": 1.0, "f1": 0.91, "rouge_l": 0.86, "status": "PASS"},
+    {"record_id": "UNI_010", "accuracy": 1.0, "f1": 0.88, "rouge_l": 0.83, "status": "PASS"},
+    {"record_id": "UNI_011", "accuracy": 1.0, "f1": 0.85, "rouge_l": 0.79, "status": "PASS"},
+    {"record_id": "UNI_012", "accuracy": 1.0, "f1": 0.84, "rouge_l": 0.78, "status": "PASS"},
+    {"record_id": "UNI_013", "accuracy": 1.0, "f1": 0.86, "rouge_l": 0.80, "status": "PASS"},
+    {"record_id": "UNI_014", "accuracy": 1.0, "f1": 0.90, "rouge_l": 0.85, "status": "PASS"},
+    {"record_id": "UNI_015", "accuracy": 1.0, "f1": 0.88, "rouge_l": 0.82, "status": "PASS"}
+  ],
+  "governance_flags": [
+    {
+      "flag": "INTENTIONAL_ERROR_DETECTED",
+      "record_id": "UNI_005",
+      "note": "Record UNI_005 is a planted hallucination test — model denied scholarship availability. Detection confirmed."
+    }
+  ]
+}

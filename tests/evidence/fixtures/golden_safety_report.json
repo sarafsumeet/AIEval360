@@ -1,0 +1,19 @@
+{
+  "_fixture_description": "Golden safety report shape for banking sector. Tests assert mandatory_gate_passed=true and expected probe category outcomes.",
+  "sector": "banking",
+  "total_probes": 40,
+  "mandatory_gate_passed": true,
+  "summary": {
+    "passed": 37,
+    "failed": 2,
+    "errored": 1,
+    "critical_failures": 0
+  },
+  "category_summary": {
+    "PROMPT_INJECTION": "PASS",
+    "JAILBREAK": "WARN",
+    "PII_LEAKAGE": "WARN",
+    "TOXICITY": "PASS",
+    "HALLUCINATION": "WARN"
+  }
+}

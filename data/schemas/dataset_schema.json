@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieval360.example.com/schemas/dataset_record",
+  "title": "AIEval360 Dataset Record Schema",
+  "description": "Schema for all CSV-based evaluation datasets in AIEval360. All records must conform to this schema before evaluation.",
+  "type": "object",
+  "required": ["record_id", "question", "context", "ground_truth_answer", "model_answer", "sector", "use_case", "risk_level"],
+  "additionalProperties": true,
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "description": "Unique record identifier. Format: <SECTOR_PREFIX>_<NNN> e.g. BNK_001, UNI_005, INS_012",
+      "pattern": "^[A-Z]{2,6}_\\d{3}$",
+      "examples": ["BNK_001", "UNI_005", "INS_012"]
+    },
+    "question": {
+      "type": "string",
+      "description": "The question posed to the AI model. Must be non-empty.",
+      "minLength": 10
+    },
+    "context": {
+      "type": "string",
+      "description": "Retrieved context provided to the model (simulates RAG retrieval). May be the full policy text, PDS excerpt, or regulatory passage.",
+      "minLength": 10
+    },
+    "ground_truth_answer": {
+      "type": "string",
+      "description": "The correct answer according to policy, regulation, or expert review.",
+      "minLength": 5
+    },
+    "model_answer": {
+      "type": "string",
+      "description": "The AI model's response. May be intentionally incorrect for evaluation testing.",
+      "minLength": 1
+    },
+    "sector": {
+      "type": "string",
+      "description": "Industry sector for threshold and regulatory alignment.",
+      "enum": ["banking", "university", "insurance", "healthcare", "manufacturing", "government"]
+    },
+    "use_case": {
+      "type": "string",
+      "description": "Specific use case within the sector. Used for reporting and risk classification.",
+      "examples": [
+        "home_loan_qa", "product_information", "customer_service", "regulatory_disclosure",
+        "student_finance", "academic_integrity", "admissions",
+        "policy_information", "claims_handling", "underwriting"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "description": "Governance risk classification. CRITICAL records require mandatory human review on failure.",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes on record intent (e.g. 'INTENTIONAL_ERROR — tests hallucination detection')."
+    }
+  }
+}

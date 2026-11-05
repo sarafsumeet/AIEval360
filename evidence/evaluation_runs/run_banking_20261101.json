@@ -1,0 +1,72 @@
+{
+  "run_id": "eval-run-bnk-2026-11-01-001",
+  "run_timestamp": "2026-11-01T09:15:33Z",
+  "dataset": "data/datasets/banking/loan_qa_dataset.csv",
+  "dataset_checksum": "sha256:a3f9c72b1e84d6082f417c95e3b0a921c7d4e6f85a1092b3c74d5e9a2f8b1c3d",
+  "sector": "banking",
+  "model_under_test": "mock-provider:gpt4-equivalent",
+  "evaluation_stage": "stage2_metrics",
+  "records_evaluated": 15,
+  "run_status": "COMPLETED",
+  "provenance": {
+    "triggered_by": "scheduled_evaluation",
+    "git_commit": "abc123def456",
+    "config_file": "config/metrics_config.yaml",
+    "evaluator_version": "1.0.0"
+  },
+  "aggregate_metrics": {
+    "accuracy": {
+      "value": 0.8,
+      "threshold_pass": 0.92,
+      "status": "FAIL",
+      "note": "Banking sector override threshold applied (0.92). Three intentional error records (BNK_002, BNK_004, BNK_007) reduce overall accuracy."
+    },
+    "f1": {
+      "value": 0.74,
+      "threshold_pass": 0.80,
+      "status": "WARN"
+    },
+    "rouge_l": {
+      "value": 0.71,
+      "threshold_pass": 0.65,
+      "status": "PASS"
+    },
+    "bleu": {
+      "value": 0.52,
+      "threshold_pass": 0.60,
+      "status": "WARN"
+    },
+    "exact_match": {
+      "value": 0.0,
+      "threshold_pass": 0.70,
+      "status": "FAIL",
+      "note": "No exact matches expected for free-text responses."
+    }
+  },
+  "per_record_results": [
+    {"record_id": "BNK_001", "accuracy": 1.0, "f1": 0.88, "rouge_l": 0.82, "status": "PASS"},
+    {"record_id": "BNK_002", "accuracy": 0.0, "f1": 0.04, "rouge_l": 0.07, "status": "FAIL", "flag": "INTENTIONAL_ERROR"},
+    {"record_id": "BNK_003", "accuracy": 1.0, "f1": 0.91, "rouge_l": 0.87, "status": "PASS"},
+    {"record_id": "BNK_004", "accuracy": 0.0, "f1": 0.11, "rouge_l": 0.14, "status": "FAIL", "flag": "INTENTIONAL_ERROR"},
+    {"record_id": "BNK_005", "accuracy": 1.0, "f1": 0.86, "rouge_l": 0.79, "status": "PASS"},
+    {"record_id": "BNK_006", "accuracy": 1.0, "f1": 0.93, "rouge_l": 0.88, "status": "PASS"},
+    {"record_id": "BNK_007", "accuracy": 0.0, "f1": 0.05, "rouge_l": 0.08, "status": "FAIL", "flag": "INTENTIONAL_ERROR"},
+    {"record_id": "BNK_008", "accuracy": 1.0, "f1": 0.89, "rouge_l": 0.83, "status": "PASS"},
+    {"record_id": "BNK_009", "accuracy": 1.0, "f1": 0.84, "rouge_l": 0.80, "status": "PASS"},
+    {"record_id": "BNK_010", "accuracy": 1.0, "f1": 0.90, "rouge_l": 0.85, "status": "PASS"},
+    {"record_id": "BNK_011", "accuracy": 1.0, "f1": 0.92, "rouge_l": 0.88, "status": "PASS"},
+    {"record_id": "BNK_012", "accuracy": 1.0, "f1": 0.87, "rouge_l": 0.81, "status": "PASS"},
+    {"record_id": "BNK_013", "accuracy": 1.0, "f1": 0.88, "rouge_l": 0.83, "status": "PASS"},
+    {"record_id": "BNK_014", "accuracy": 1.0, "f1": 0.90, "rouge_l": 0.86, "status": "PASS"},
+    {"record_id": "BNK_015", "accuracy": 1.0, "f1": 0.89, "rouge_l": 0.84, "status": "PASS"}
+  ],
+  "governance_flags": [
+    {
+      "flag": "BELOW_SECTOR_THRESHOLD",
+      "metric": "accuracy",
+      "value": 0.8,
+      "required": 0.92,
+      "recommendation": "Investigate BNK_002, BNK_004, BNK_007 error patterns. Trigger human review for CRITICAL risk records."
+    }
+  ]
+}

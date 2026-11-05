@@ -1,0 +1,95 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/claude/aieval360
+configfile: pyproject.toml
+plugins: platformdirs-4.13.3, anyio-4.15.1, Faker-40.44.0, mock-3.17.0, asyncio-1.4.1.post1, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 580 items
+
+tests/contract/test_dataset_schema.py ........................           [  4%]
+tests/contract/test_evidence_schema.py ..............                    [  6%]
+tests/evidence/test_evidence_fixtures.py ............                    [  8%]
+tests/integration/test_evaluation_pipeline.py ...............            [ 11%]
+tests/performance/test_throughput.py ....                                [ 11%]
+tests/security/test_adversarial_probes.py .....................          [ 15%]
+tests/unit/agents/test_agent_evaluator.py .............................. [ 20%]
+.......................                                                  [ 24%]
+tests/unit/evaluation/test_dataset_loader.py ..................          [ 27%]
+tests/unit/evaluation/test_llm_metrics.py .............................. [ 32%]
+.........                                                                [ 34%]
+tests/unit/evaluation/test_metric_base.py ....................           [ 37%]
+tests/unit/evaluation/test_orchestrator.py ..............                [ 40%]
+tests/unit/evaluation/test_rag_generation_metrics.py ................... [ 43%]
+..................                                                       [ 46%]
+tests/unit/evaluation/test_rag_pipeline.py ............................. [ 51%]
+.......                                                                  [ 52%]
+tests/unit/evaluation/test_rag_retrieval_metrics.py .................... [ 56%]
+...........................                                              [ 61%]
+tests/unit/evaluation/test_traditional_ml_metrics.py ................... [ 64%]
+..........                                                               [ 66%]
+tests/unit/safety/test_probe_library.py .............................    [ 71%]
+tests/unit/safety/test_safety_evaluator.py ............................. [ 76%]
+..............................                                           [ 81%]
+tests/unit/safety/test_safety_models.py ................................ [ 86%]
+....                                                                     [ 87%]
+tests/unit/test_models.py .............................                  [ 92%]
+tests/unit/test_provider_interface.py ..........................         [ 96%]
+tests/unit/test_settings.py ..................                           [100%]
+
+=============================== warnings summary ===============================
+tests/unit/test_settings.py: 10 warnings
+  /usr/local/lib/python3.13/site-packages/pydantic/main.py:263: RuntimeWarning: AIEVAL360_SECURITY_SECRET_KEY is using the default insecure value. Set the environment variable before any real deployment.
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.18-final-0 _______________
+
+Name                                             Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------
+aieval360/__init__.py                                4      0   100%
+aieval360/agents/__init__.py                         0      0   100%
+aieval360/agents/evaluator.py                       76      3    96%   53-54, 131
+aieval360/agents/models.py                          82      9    89%   80, 84, 111, 113, 137-140, 143
+aieval360/core/config/__init__.py                    0      0   100%
+aieval360/core/config/settings.py                  123     11    91%   86, 88, 90, 92, 94, 132-133, 177, 181, 184, 193
+aieval360/core/models/__init__.py                    0      0   100%
+aieval360/core/models/base.py                       17      0   100%
+aieval360/core/models/evaluation.py                160     22    86%   81-83, 86, 174-176, 179-181, 184-186, 189-191, 194, 242-244, 247, 286
+aieval360/core/models/governance.py                135      8    94%   71, 102, 167, 220, 248-250, 253
+aieval360/core/models/organisation.py              114      7    94%   68, 95, 121, 144-145, 186, 233
+aieval360/core/persistence/__init__.py               0      0   100%
+aieval360/core/persistence/database.py              73     55    25%   31-50, 64-75, 81-83, 89-91, 104-111, 119-126, 134-143, 150-154, 162-165
+aieval360/evaluation/__init__.py                     0      0   100%
+aieval360/evaluation/datasets/__init__.py            0      0   100%
+aieval360/evaluation/datasets/loader.py             57      4    93%   78, 83, 86-87
+aieval360/evaluation/metrics/__init__.py             0      0   100%
+aieval360/evaluation/metrics/base.py                59      0   100%
+aieval360/evaluation/metrics/llm_metrics.py        161     14    91%   67, 71-73, 149-158
+aieval360/evaluation/metrics/registry.py            11      0   100%
+aieval360/evaluation/metrics/traditional_ml.py     177     52    71%   70, 74-75, 80-87, 104, 108-109, 114-121, 138, 142-146, 166-182, 204, 208-209, 229, 232-233, 254, 262-263
+aieval360/evaluation/rag/__init__.py                 0      0   100%
+aieval360/evaluation/rag/generation_metrics.py      61      2    97%   103, 170
+aieval360/evaluation/rag/models.py                  50      1    98%   26
+aieval360/evaluation/rag/pipeline.py                84      5    94%   169-171, 200-201
+aieval360/evaluation/rag/registry.py                51      0   100%
+aieval360/evaluation/rag/retrieval_metrics.py       71      0   100%
+aieval360/evaluation/runners/__init__.py             0      0   100%
+aieval360/evaluation/runners/orchestrator.py       100      2    98%   102, 203
+aieval360/providers/__init__.py                      0      0   100%
+aieval360/providers/base/__init__.py                 0      0   100%
+aieval360/providers/base/interface.py              135     13    90%   120-121, 165, 175-179, 217, 225, 251-253
+aieval360/providers/mock/__init__.py                 0      0   100%
+aieval360/providers/mock/adapter.py                 99      7    93%   123, 144, 147, 150, 153, 207-210
+aieval360/providers/ollama/__init__.py               0      0   100%
+aieval360/providers/ollama/adapter.py               78     78     0%   9-196
+aieval360/providers/openai/__init__.py               0      0   100%
+aieval360/providers/openai/adapter.py               86     86     0%   11-238
+aieval360/safety/__init__.py                         0      0   100%
+aieval360/safety/evaluator.py                       98      1    99%   281
+aieval360/safety/models.py                          97      0   100%
+aieval360/safety/probe_library.py                   20      0   100%
+------------------------------------------------------------------------------
+TOTAL                                             2279    380    83%
+Coverage XML written to file tests/results/coverage.xml
+======================= 580 passed, 10 warnings in 3.83s =======================

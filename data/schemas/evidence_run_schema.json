@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieval360.example.com/schemas/evidence_run",
+  "title": "AIEval360 Evaluation Run Evidence Schema",
+  "description": "Schema for JSON evidence files produced by the evaluation pipeline and stored in evidence/evaluation_runs/.",
+  "type": "object",
+  "required": ["run_id", "run_timestamp", "dataset", "dataset_checksum", "sector", "records_evaluated", "run_status", "aggregate_metrics"],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "description": "Unique run identifier (UUID-based)."
+    },
+    "run_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of run completion."
+    },
+    "dataset": {
+      "type": "string",
+      "description": "Relative path to the dataset file evaluated."
+    },
+    "dataset_checksum": {
+      "type": "string",
+      "description": "SHA-256 checksum of the dataset file for lineage traceability.",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "sector": {
+      "type": "string",
+      "enum": ["banking", "university", "insurance", "healthcare", "manufacturing", "government"]
+    },
+    "model_under_test": {
+      "type": "string",
+      "description": "Identifier of the model being evaluated."
+    },
+    "evaluation_stage": {
+      "type": "string",
+      "enum": ["stage1_foundation", "stage2_metrics", "stage3_rag", "stage4_safety"]
+    },
+    "records_evaluated": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "run_status": {
+      "type": "string",
+      "enum": ["COMPLETED", "PARTIAL", "FAILED", "RUNNING"]
+    },
+    "aggregate_metrics": {
+      "type": "object",
+      "description": "Per-metric aggregate results with status classification."
+    },
+    "per_record_results": {
+      "type": "array",
+      "description": "Individual record evaluation results.",
+      "items": {
+        "type": "object",
+        "required": ["record_id", "status"],
+        "properties": {
+          "record_id": {"type": "string"},
+          "accuracy": {"type": "number", "minimum": 0, "maximum": 1},
+          "f1": {"type": "number", "minimum": 0, "maximum": 1},
+          "rouge_l": {"type": "number", "minimum": 0, "maximum": 1},
+          "status": {"type": "string", "enum": ["PASS", "WARN", "FAIL", "ERROR", "SKIPPED"]},
+          "flag": {"type": "string"}
+        }
+      }
+    },
+    "governance_flags": {
+      "type": "array",
+      "description": "Governance flags raised by this run requiring follow-up action."
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Run provenance metadata for audit trail."
+    }
+  }
+}
